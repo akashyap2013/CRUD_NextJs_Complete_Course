@@ -6,32 +6,32 @@ import { useQueryClient, useMutation } from "react-query"
 import { addUser, getUsers } from "../lib/helper"
 
 
-export default function AddUserForm({ formData, setFormData }){
+export default function AddUserForm({ formData, setFormData }) {
 
     const queryClient = useQueryClient()
     const addMutation = useMutation(addUser, {
-        onSuccess : () => {
+        onSuccess: () => {
             queryClient.prefetchQuery('users', getUsers)
         }
     })
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if(Object.keys(formData).length == 0) return console.log("Don't have Form Data");
+        if (Object.keys(formData).length == 0) return console.log("Don't have Form Data");
         let { firstname, lastname, email, salary, date, status } = formData;
 
         const model = {
-            name : `${firstname} ${lastname}`,
-            avatar: `https://randomuser.me/api/portraits/men/${Math.floor(Math.random() * 10)}.jpg`,
-            email, salary, date, status : status ?? "Active"
+            name: `${firstname} ${lastname}`,
+            avatar: `https://randomuser.me/api/portraits/${Math.random() > 0.5 ? 'men' : 'women'}/${Math.floor(Math.random() * 100)}.jpg`,
+            email, salary, date, status: status ?? "Active"
         }
 
         addMutation.mutate(model)
     }
 
-    if(addMutation.isLoading) return <div>Loading!</div>
-    if(addMutation.isError) return <Bug message={addMutation.error.message}></Bug>
-    if(addMutation.isSuccess) return <Success message={"Added Successfully"}></Success>
+    if (addMutation.isLoading) return <div>Loading!</div>
+    if (addMutation.isError) return <Bug message={addMutation.error.message}></Bug>
+    if (addMutation.isSuccess) return <Success message={"Added Successfully"}></Success>
 
     return (
         <form className="grid lg:grid-cols-2 w-4/6 gap-4" onSubmit={handleSubmit}>
@@ -68,7 +68,7 @@ export default function AddUserForm({ formData, setFormData }){
             </div>
 
             <button type="submit" className="flex justify-center text-md w-2/6 bg-green-500 text-white px-4 py-2 border rounded-md hover:bg-gray-50 hover:border-green-500 hover:text-green-500">
-             Add <span className="px-1"><BiPlus size={24}></BiPlus></span>
+                Add <span className="px-1"><BiPlus size={24}></BiPlus></span>
             </button>
 
         </form>

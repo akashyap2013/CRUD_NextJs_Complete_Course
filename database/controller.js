@@ -10,7 +10,8 @@ export async function getUsers(req, res){
         if(!users) return res.status(404).json( { error: "Data not Found"})
         res.status(200).json(users)
     } catch (error) {
-        res.status(404).json( { error : "Error While Fetching Data"})
+        console.error(error)
+        res.status(404).json({ error: "Error While Fetching Data" })
     }
 }
 
@@ -33,8 +34,9 @@ export async function getUser(req, res){
 export async function postUser(req, res){
     try {
         const formData = req.body;
-        if(!formData) return res.status(404).json( { error: "Form Data Not Provided...!"});
-        Users.create( formData, function(err, data){
+        if (!formData) return res.status(404).json({ error: "Form Data Not Provided...!" });
+        Users.create(formData, function (err, data) {
+            console.error("Error: ", err);
             return res.status(200).json(data)
         })
     } catch (error) {
@@ -71,6 +73,6 @@ export async function deleteUser(req, res){
         res.status(404).json({ error: "User Not Selected...!"})
 
     } catch (error) {
-        res.status(404).json({ error: "Error While Deleting the User...!"})
+        res.status(404).json({ error: "Error While Deleting the User...!" })
     }
 }
